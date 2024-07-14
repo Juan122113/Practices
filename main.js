@@ -2,8 +2,10 @@
 
 // });
 
-function initialize() {
+// function initialize() {
 
-}
+// }
 
-document.addEventListener('DOMContentLoaded', initialize);
+// document.addEventListener('DOMContentLoaded', initialize);
+//let body = document.querySelector("body");
+console.log(document.querySelector("body"));
