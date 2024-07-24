@@ -43,11 +43,16 @@ function handleSubmit(e) {
 
     for (const dat in data) {
         if (data[dat].length > 0) {
-            switch (dat) {
-                case "name":
-                    console.log(typeof data[dat])
-
+            if (typeof data[dat] == "string") {
+                switch (dat) {
+                    case "name":
+                        if (data[dat].length < 3 || data[dat].length > 10) {
+                            alert("Se necesita que el nombre sea de entre tres y diez caracteres.");
+                        }
+    
+                }
             }
+            
         } else {
             alert(dat + ": Campo requerido");
         }
