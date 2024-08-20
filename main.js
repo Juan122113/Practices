@@ -1,87 +1,57 @@
-// const screen = document.getElementById('screen');
-// const redBtn = document.getElementById('red');
-// const greenBtn = document.getElementById('green');
-// const blueBtn = document.getElementById('blue');
+const header = document.querySelector("header");
+const section = document.querySelector("section");
+const requestURL = "https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json";
+const request = new XMLHttpRequest();
+request.open("GET", requestURL);
+request.responseType = "json";
+request.send();
 
-
-// redBtn.addEventListener('click', (e) => {
-//     screen.style.backgroundColor = 'red';
-// });
-
-// greenBtn.addEventListener('click', (e) => {
-//     screen.style.backgroundColor = 'green';
-// });
-
-// blueBtn.addEventListener('click', () => {
-//     screen.style.backgroundColor = 'blue';
-// });
-
-// const buttons = document.querySelectorAll('button');
-
-// whit a forEach loop
-
-// buttons.forEach((i) => {
-//     i.addEventListener('click', (e) => {
-//         screen.style.backgroundColor = e.target.id;
-//     });
-// });
-
-const form = document.getElementById('form');
-
-function handleSubmit(e) {
-    e.preventDefault() // prevent the default behaviour
-
-    // const formData = new FormData(e.target);
-    // const data = Object.fromEntries(formData);
-    // const data = {};
-    // const fields = e.target.querySelectorAll("input, select, textarea");
-    const data = Object.fromEntries(new FormData(e.target));
-
-    // for (const field of fields) {
-    //     data[field.name] = field.value;
-    // }
-
-    for (const dat in data) {
-        if (data[dat].length > 0) {
-            if (typeof data[dat] == "string") {
-                switch (dat) {
-                    case "name":
-                        if (data[dat].length < 3 || data[dat].length > 10) {
-                            alert("Se necesita que el nombre sea de entre tres y diez caracteres.");
-                        }
-                    break;
-                    case "email":
-                        if ((/(^\W+)(\w+)@/i).test(data[dat])) {
-                            alert("Es necesaior que el email sea de un formato válido.")
-                         } else if ((/(^\w+)(\W)@/i).test(data[dat])) {
-                            alert("Es necesario que el email sea de un formato válido.")
-                         }
-                    break
-                    case "password":
-                        if (data[dat].length < 3 || data[dat].length > 10) {
-                            alert("Se necesita que el password sea de entre tres y diez caracteres.");
-                        }
-                    break;
-                    case "confirm-password":
-                        if (data[dat] != data["password"]) {
-                            alert("las contraseñas deben coincidir")
-                        }
-
-                        
-
-    
-                }
-            }
-            
-        } else {
-            alert(dat + ": Campo requerido");
-        }
-    }
-
-    console.log(data);
-    //console.log(formData);
-    // console.log(fields);
+request.onload = function () {
+    const superHeroes = request.response;
+    populateHeader(superHeroes);
+    showHeroes(superHeroes);
 }
 
-form.addEventListener('submit', handleSubmit);
+function populateHeader(jsonObj) {
+    const myH1 = document.createElement("h1");
+    myH1.textContent = jsonObj["squadName"];
+    header.appendChild(myH1);
+
+    const myPara = document.createElement("p");
+    myPara.textContent = "Hometown: " + jsonObj["homeTown"] + " // Formed: " + jsonObj["formed"];
+    header.appendChild(myPara);
+}
+
+function showHeroes(jsonObj) {
+    const heroes = jsonObj["members"];
+
+    for (var i = 0; i < heroes.length; i++) {
+        const myArticle = document.createElement("article");
+        const myH2 = document.createElement("h2");
+        const myParam1 = document.createElement("p");
+        const myParam2 = document.createElement("p");
+        const myParam3 = document.createElement("p");
+        const myList = document.createElement("ul");
+
+        myH2.textContent = heroes[i].name;
+        myParam1.textContent = "Secret identity: " + heroes[i].secretIdentity;
+        myParam1.textContent = "Age: " + heroes[i].age;
+        myParam3.textContent = "Superpowers:";
+
+        const superPowers = heroes[i].powers;
+        for (var j = 0; j <superPowers.length; j++) {
+            const listItem = document.createElement("li");
+            listItem.textContent = superPowers[j];
+            myList.appendChild(listItem);
+        }
+
+        myArticle.appendChild(myH2);
+        myArticle.appendChild(myParam1);
+        myArticle.appendChild(myParam2);
+        myArticle.appendChild(myParam3);
+        myArticle.appendChild(myList);
+
+        section.appendChild(myArticle);
+    }
+}
 
